@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE HealthData [
+        <!-- HealthKit Export Version: 8 -->
+        <!ELEMENT HealthData (ExportDate,Me,(Record|Correlation|Workout|ActivitySummary|ClinicalRecord)*)>
+        <!ATTLIST HealthData
+                locale CDATA #REQUIRED
+                >
+        <!ELEMENT ExportDate EMPTY>
+        <!ATTLIST ExportDate
+                value CDATA #REQUIRED
+                >
+        <!ELEMENT Me EMPTY>
+        <!ATTLIST Me
+                HKCharacteristicTypeIdentifierDateOfBirth         CDATA #REQUIRED
+                HKCharacteristicTypeIdentifierBiologicalSex       CDATA #REQUIRED
+                HKCharacteristicTypeIdentifierBloodType           CDATA #REQUIRED
+                HKCharacteristicTypeIdentifierFitzpatrickSkinType CDATA #REQUIRED
+                >
+        <!ELEMENT Record ((MetadataEntry|HeartRateVariabilityMetadataList)*)>
+        <!ATTLIST Record
+                type          CDATA #REQUIRED
+                unit          CDATA #IMPLIED
+                value         CDATA #IMPLIED
+                sourceName    CDATA #REQUIRED
+                sourceVersion CDATA #IMPLIED
+                device        CDATA #IMPLIED
+                creationDate  CDATA #IMPLIED
+                startDate     CDATA #REQUIRED
+                endDate       CDATA #REQUIRED
+                >
+        <!-- Note: Any Records that appear as children of a correlation also appear as top-level records in this document. -->
+        <!ELEMENT Correlation ((MetadataEntry|Record)*)>
+        <!ATTLIST Correlation
+                type          CDATA #REQUIRED
+                sourceName    CDATA #REQUIRED
+                sourceVersion CDATA #IMPLIED
+                device        CDATA #IMPLIED
+                creationDate  CDATA #IMPLIED
+                startDate     CDATA #REQUIRED
+                endDate       CDATA #REQUIRED
+                >
+        <!ELEMENT Workout ((MetadataEntry|WorkoutEvent|WorkoutRoute)*)>
+        <!ATTLIST Workout
+                workoutActivityType   CDATA #REQUIRED
+                duration              CDATA #IMPLIED
+                durationUnit          CDATA #IMPLIED
+                totalDistance         CDATA #IMPLIED
+                totalDistanceUnit     CDATA #IMPLIED
+                totalEnergyBurned     CDATA #IMPLIED
+                totalEnergyBurnedUnit CDATA #IMPLIED
+                sourceName            CDATA #REQUIRED
+                sourceVersion         CDATA #IMPLIED
+                device                CDATA #IMPLIED
+                creationDate          CDATA #IMPLIED
+                startDate             CDATA #REQUIRED
+                endDate               CDATA #REQUIRED
+                >
+        <!ELEMENT WorkoutEvent EMPTY>
+        <!ATTLIST WorkoutEvent
+                type         CDATA #REQUIRED
+                date         CDATA #REQUIRED
+                duration     CDATA #IMPLIED
+                durationUnit CDATA #IMPLIED
+                >
+        <!ELEMENT WorkoutRoute ((MetadataEntry|Location)*)>
+        <!ATTLIST WorkoutRoute
+                sourceName    CDATA #REQUIRED
+                sourceVersion CDATA #IMPLIED
+                device        CDATA #IMPLIED
+                creationDate  CDATA #IMPLIED
+                startDate     CDATA #REQUIRED
+                endDate       CDATA #REQUIRED
+                >
+        <!ELEMENT Location EMPTY>
+        <!ATTLIST Location
+                date               CDATA #REQUIRED
+                latitude           CDATA #REQUIRED
+                longitude          CDATA #REQUIRED
+                altitude           CDATA #REQUIRED
+                horizontalAccuracy CDATA #REQUIRED
+                verticalAccuracy   CDATA #REQUIRED
+                course             CDATA #REQUIRED
+                speed              CDATA #REQUIRED
+                >
+        <!ELEMENT ActivitySummary EMPTY>
+        <!ATTLIST ActivitySummary
+                dateComponents           CDATA #IMPLIED
+                activeEnergyBurned       CDATA #IMPLIED
+                activeEnergyBurnedGoal   CDATA #IMPLIED
+                activeEnergyBurnedUnit   CDATA #IMPLIED
+                appleExerciseTime        CDATA #IMPLIED
+                appleExerciseTimeGoal    CDATA #IMPLIED
+                appleStandHours          CDATA #IMPLIED
+                appleStandHoursGoal      CDATA #IMPLIED
+                >
+        <!ELEMENT MetadataEntry EMPTY>
+        <!ATTLIST MetadataEntry
+                key   CDATA #REQUIRED
+                value CDATA #REQUIRED
+                >
+        <!-- Note: Heart Rate Variability records captured by Apple Watch may include an associated list of instantaneous beats-per-minute readings. -->
+        <!ELEMENT HeartRateVariabilityMetadataList (InstantaneousBeatsPerMinute*)>
+        <!ELEMENT InstantaneousBeatsPerMinute EMPTY>
+        <!ATTLIST InstantaneousBeatsPerMinute
+                bpm  CDATA #REQUIRED
+                time CDATA #REQUIRED
+                >
+        <!ELEMENT ClinicalRecord EMPTY>
+        <!ATTLIST ClinicalRecord
+                type              CDATA #REQUIRED
+                identifier        CDATA #REQUIRED
+                sourceName        CDATA #REQUIRED
+                sourceURL         CDATA #REQUIRED
+                fhirVersion       CDATA #REQUIRED
+                receivedDate      CDATA #REQUIRED
+                resourceFilePath  CDATA #REQUIRED
+                >
+        ]>
+<HealthData locale="fr_FR">
+    <ExportDate value="2019-01-20 11:21:07 +0100"/>
+    <Me HKCharacteristicTypeIdentifierDateOfBirth="1986-06-09" HKCharacteristicTypeIdentifierBiologicalSex="HKBiologicalSexMale" HKCharacteristicTypeIdentifierBloodType="HKBloodTypeNotSet" HKCharacteristicTypeIdentifierFitzpatrickSkinType="HKFitzpatrickSkinTypeNotSet"/>
+    <Record type="HKQuantityTypeIdentifierWalkingHeartRateAverage" sourceName="Apple Watch" sourceVersion="5.1.2" unit="count/min" creationDate="2018-12-22 00:33:44 +0100" startDate="2018-12-21 08:03:56 +0100" endDate="2018-12-21 18:55:21 +0100" value="107.5"/>
+    <Record type="HKQuantityTypeIdentifierVO2Max" sourceName="Apple Watch" unit="mL/min·kg" creationDate="2018-12-08 17:19:30 +0100" startDate="2018-12-08 17:19:30 +0100" endDate="2018-12-08 17:19:30 +0100" value="42.095">
+        <MetadataEntry key="HKVO2MaxTestType" value="2"/>
+    </Record>
+    <Record type="HKQuantityTypeIdentifierStepCount" sourceName="iPhone" sourceVersion="9.3.2" device="&lt;&lt;HKDevice: 0x28301c1e0&gt;, name:iPhone, manufacturer:Apple, model:iPhone, hardware:iPhone8,4, software:9.3.2&gt;" unit="count" creationDate="2016-07-11 23:03:23 +0100" startDate="2016-07-11 21:58:42 +0100" endDate="2016-07-11 21:59:05 +0100" value="14"/>
+    <Record type="HKQuantityTypeIdentifierRestingHeartRate" sourceName="Apple Watch" sourceVersion="5.1.1" unit="count/min" creationDate="2018-11-30 21:11:57 +0100" startDate="2018-11-30 06:13:30 +0100" endDate="2018-11-30 21:06:16 +0100" value="49"/>
+    <Record type="HKQuantityTypeIdentifierHeight" sourceName="Foo" sourceVersion="12.1" unit="cm" creationDate="2018-11-16 13:24:18 +0100" startDate="2018-11-16 13:24:18 +0100" endDate="2018-11-16 13:24:18 +0100" value="183"/>
+    <Record type="HKQuantityTypeIdentifierHeartRateVariabilitySDNN" sourceName="Apple Watch" sourceVersion="5.1.1" device="&lt;&lt;HKDevice: 0x283336ee0&gt;, name:Apple Watch, manufacturer:Apple, model:Watch, hardware:Watch4,2, software:5.1.1&gt;" unit="ms" creationDate="2018-11-19 08:34:44 +0100" startDate="2018-11-19 08:33:39 +0100" endDate="2018-11-19 08:34:44 +0100" value="25.5526">
+        <HeartRateVariabilityMetadataList>
+            <InstantaneousBeatsPerMinute bpm="78" time="08:33:44,67"/>
+        </HeartRateVariabilityMetadataList>
+    </Record>
+    <Record type="HKQuantityTypeIdentifierHeartRate" sourceName="Apple Watch" sourceVersion="5.0.1" device="&lt;&lt;HKDevice: 0x2833968a0&gt;, name:Apple Watch, manufacturer:Apple, model:Watch, hardware:Watch4,2, software:5.0.1&gt;" unit="count/min" creationDate="2018-11-16 13:36:42 +0100" startDate="2018-11-16 13:28:45 +0100" endDate="2018-11-16 13:28:45 +0100" value="90">
+        <MetadataEntry key="HKMetadataKeyHeartRateMotionContext" value="0"/>
+    </Record>
+    <Record type="HKQuantityTypeIdentifierFlightsClimbed" sourceName="iPhone" sourceVersion="12.0" device="&lt;&lt;HKDevice: 0x2830f01e0&gt;, name:iPhone, manufacturer:Apple, model:iPhone, hardware:iPhone10,4, software:12.0&gt;" unit="count" creationDate="2018-09-30 20:19:34 +0100" startDate="2018-09-30 19:56:31 +0100" endDate="2018-09-30 19:56:34 +0100" value="1"/>
+    <Record type="HKQuantityTypeIdentifierDistanceWalkingRunning" sourceName="Bar" sourceVersion="15009" unit="km" creationDate="2019-01-11 18:11:33 +0100" startDate="2019-01-11 12:34:03 +0100" endDate="2019-01-11 13:13:54 +0100" value="6.8552">
+        <MetadataEntry key="HKIndoorWorkout" value="0"/>
+        <MetadataEntry key="HKExternalUUID" value="strava://activities/2071320016"/>
+    </Record>
+    <Record type="HKQuantityTypeIdentifierBodyMass" sourceName="iPhone" sourceVersion="12.1" unit="kg" creationDate="2018-11-16 13:24:18 +0100" startDate="2018-11-16 13:24:18 +0100" endDate="2018-11-16 13:24:18 +0100" value="83"/>
+    <Record type="HKQuantityTypeIdentifierBasalEnergyBurned" sourceName="Apple Watch" sourceVersion="5.0.1" device="&lt;&lt;HKDevice: 0x2830f4230&gt;, name:Apple Watch, manufacturer:Apple, model:Watch, hardware:Watch4,2, software:5.0.1&gt;" unit="kcal" creationDate="2018-11-16 13:18:46 +0100" startDate="2018-10-28 02:25:14 +0100" endDate="2018-11-09 13:18:27 +0100" value="18087.8"/>
+    <Record type="HKQuantityTypeIdentifierAppleExerciseTime" sourceName="Apple Watch" sourceVersion="5.1.2" device="&lt;&lt;HKDevice: 0x2830d10e0&gt;, name:Apple Watch, manufacturer:Apple, model:Watch, hardware:Watch4,2, software:5.1.2&gt;" unit="min" creationDate="2019-01-17 18:46:32 +0100" startDate="2019-01-17 18:45:27 +0100" endDate="2019-01-17 18:46:27 +0100" value="1"/>
+    <Record type="HKQuantityTypeIdentifierActiveEnergyBurned" sourceName="Apple Watch" sourceVersion="5.0.1" device="&lt;&lt;HKDevice: 0x283368230&gt;, name:Apple Watch, manufacturer:Apple, model:Watch, hardware:Watch4,2, software:5.0.1&gt;" unit="kcal" creationDate="2018-11-16 13:18:46 +0100" startDate="2018-10-28 02:30:13 +0100" endDate="2018-11-09 13:18:27 +0100" value="0.058"/>
+</HealthData>
