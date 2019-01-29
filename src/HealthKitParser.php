@@ -56,58 +56,58 @@ class HealthKitParser
      */
     public function lines(): Generator
     {
-        foreach ($this->xml->Record as $record) {
-            switch ($tag = $record['type'][0] ?? '') {
+        foreach ($this->xml as $line) {
+            switch ($tag = $line['type'][0] ?? '') {
                 case HKQuantityTypeIdentifierActiveEnergyBurned::name():
-                    yield HKQuantityTypeIdentifierActiveEnergyBurned::fromXml($record);
+                    yield HKQuantityTypeIdentifierActiveEnergyBurned::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierAppleExerciseTime::name():
-                    yield HKQuantityTypeIdentifierAppleExerciseTime::fromXml($record);
+                    yield HKQuantityTypeIdentifierAppleExerciseTime::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierBasalEnergyBurned::name():
-                    yield HKQuantityTypeIdentifierBasalEnergyBurned::fromXml($record);
+                    yield HKQuantityTypeIdentifierBasalEnergyBurned::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierBodyMass::name():
-                    yield HKQuantityTypeIdentifierBodyMass::fromXml($record);
+                    yield HKQuantityTypeIdentifierBodyMass::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierDistanceWalkingRunning::name():
-                    yield HKQuantityTypeIdentifierDistanceWalkingRunning::fromXml($record);
+                    yield HKQuantityTypeIdentifierDistanceWalkingRunning::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierFlightsClimbed::name():
-                    yield HKQuantityTypeIdentifierFlightsClimbed::fromXml($record);
+                    yield HKQuantityTypeIdentifierFlightsClimbed::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierHeartRate::name():
-                    yield HKQuantityTypeIdentifierHeartRate::fromXml($record);
+                    yield HKQuantityTypeIdentifierHeartRate::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierHeartRateVariabilitySDNN::name():
-                    yield HKQuantityTypeIdentifierHeartRateVariabilitySDNN::fromXml($record);
+                    yield HKQuantityTypeIdentifierHeartRateVariabilitySDNN::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierHeight::name():
-                    yield HKQuantityTypeIdentifierHeight::fromXml($record);
+                    yield HKQuantityTypeIdentifierHeight::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierRestingHeartRate::name():
-                    yield HKQuantityTypeIdentifierRestingHeartRate::fromXml($record);
+                    yield HKQuantityTypeIdentifierRestingHeartRate::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierStepCount::name():
-                    yield HKQuantityTypeIdentifierStepCount::fromXml($record);
+                    yield HKQuantityTypeIdentifierStepCount::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierVO2Max::name():
-                    yield HKQuantityTypeIdentifierVO2Max::fromXml($record);
+                    yield HKQuantityTypeIdentifierVO2Max::fromXml($line);
                     break;
 
                 case HKQuantityTypeIdentifierWalkingHeartRateAverage::name():
-                    yield HKQuantityTypeIdentifierWalkingHeartRateAverage::fromXml($record);
+                    yield HKQuantityTypeIdentifierWalkingHeartRateAverage::fromXml($line);
                     break;
 
                 default:
