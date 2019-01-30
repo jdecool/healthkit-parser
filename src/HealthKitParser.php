@@ -7,12 +7,15 @@ namespace JDecool\HKParser;
 use Generator;
 use JDecool\HKParser\Exception\FileNotFound;
 use JDecool\HKParser\Exception\InvalidXml;
+use JDecool\HKParser\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SimpleXMLElement;
 
 class HealthKitParser
 {
+    private const TYPE_RECORD = 'Record';
+
     private $xml;
     private $logger;
 
@@ -53,61 +56,16 @@ class HealthKitParser
 
     /**
      * @return HKModel[]
+     *
+     * @throws InvalidXml
      */
     public function lines(): Generator
     {
         foreach ($this->xml as $line) {
-            switch ($tag = $line['type'][0] ?? '') {
-                case HKQuantityTypeIdentifierActiveEnergyBurned::name():
-                    yield HKQuantityTypeIdentifierActiveEnergyBurned::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierAppleExerciseTime::name():
-                    yield HKQuantityTypeIdentifierAppleExerciseTime::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierBasalEnergyBurned::name():
-                    yield HKQuantityTypeIdentifierBasalEnergyBurned::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierBodyMass::name():
-                    yield HKQuantityTypeIdentifierBodyMass::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierDistanceWalkingRunning::name():
-                    yield HKQuantityTypeIdentifierDistanceWalkingRunning::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierFlightsClimbed::name():
-                    yield HKQuantityTypeIdentifierFlightsClimbed::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierHeartRate::name():
-                    yield HKQuantityTypeIdentifierHeartRate::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierHeartRateVariabilitySDNN::name():
-                    yield HKQuantityTypeIdentifierHeartRateVariabilitySDNN::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierHeight::name():
-                    yield HKQuantityTypeIdentifierHeight::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierRestingHeartRate::name():
-                    yield HKQuantityTypeIdentifierRestingHeartRate::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierStepCount::name():
-                    yield HKQuantityTypeIdentifierStepCount::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierVO2Max::name():
-                    yield HKQuantityTypeIdentifierVO2Max::fromXml($line);
-                    break;
-
-                case HKQuantityTypeIdentifierWalkingHeartRateAverage::name():
-                    yield HKQuantityTypeIdentifierWalkingHeartRateAverage::fromXml($line);
+            $tag = $line->getName();
+            switch ($tag) {
+                case self::TYPE_RECORD:
+                    yield $this->parseTagRecord($line);
                     break;
 
                 default:
@@ -117,5 +75,23 @@ class HealthKitParser
                     continue 2;
             }
         }
+    }
+
+    /**
+     * @throws InvalidXml
+     */
+    private function parseTagRecord(SimpleXMLElement $xml): Record
+    {
+        $recordType = $xml['type'][0] ?? '';
+        if ('' === $recordType) {
+            throw new InvalidXml('Missing type on record type');
+        }
+
+        $tagParserClass = sprintf('%s\\%s', __NAMESPACE__, $recordType);
+        if (class_exists($tagParserClass) && method_exists($tagParserClass, 'fromXml')) {
+            return call_user_func([$tagParserClass, 'fromXml'], $xml);
+        }
+
+        throw new RuntimeException("No parser implemented for '$recordType' record type");
     }
 }

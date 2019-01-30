@@ -7,6 +7,7 @@ namespace JDecool\HKParser\Tests;
 use DateTimeImmutable;
 use JDecool\HKParser\Exception\FileNotFound;
 use JDecool\HKParser\Exception\InvalidXml;
+use JDecool\HKParser\Exception\RuntimeException;
 use JDecool\HKParser\HealthKitParser;
 use JDecool\HKParser\HKQuantityTypeIdentifierActiveEnergyBurned;
 use JDecool\HKParser\HKQuantityTypeIdentifierAppleExerciseTime;
@@ -394,5 +395,35 @@ XML
         $this->assertEquals(new DateTimeImmutable('2018-12-21 18:55:21 +0100'), $tag->endDate());
         $this->assertSame('107.5', $tag->value());
         $this->assertCount(0, $tag->metadata());
+    }
+
+    public function testExceptionThrowIfEmptyRecordTypeIsParsed()
+    {
+        $parser = HealthKitParser::fromString(<<<XML
+<HealthData locale="fr_FR">
+  <Record sourceName="Apple Watch" sourceVersion="5.1.2" unit="count/min" creationDate="2018-12-22 00:33:44 +0100" startDate="2018-12-21 08:03:56 +0100" endDate="2018-12-21 18:55:21 +0100" value="107.5"/>
+</HealthData>
+XML
+);
+
+        $this->expectException(InvalidXml::class);
+        $this->expectExceptionMessage('Missing type on record type');
+
+        $tag = $parser->lines()->current();
+    }
+
+    public function testExceptionThrowIfUnknowRecordTypeIsParsed()
+    {
+        $parser = HealthKitParser::fromString(<<<XML
+<HealthData locale="fr_FR">
+  <Record type="UnknowRecordType" sourceName="Apple Watch" sourceVersion="5.1.2" unit="count/min" creationDate="2018-12-22 00:33:44 +0100" startDate="2018-12-21 08:03:56 +0100" endDate="2018-12-21 18:55:21 +0100" value="107.5"/>
+</HealthData>
+XML
+);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage("No parser implemented for 'UnknowRecordType' record type");
+
+        $tag = $parser->lines()->current();
     }
 }

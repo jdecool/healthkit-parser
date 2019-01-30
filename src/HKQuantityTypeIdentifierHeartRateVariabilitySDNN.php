@@ -7,9 +7,6 @@ namespace JDecool\HKParser;
 use DateTimeImmutable;
 use SimpleXMLElement;
 
-/**
- * @method static HKQuantityTypeIdentifierHeartRateVariabilitySDNN fromXml(\SimpleXMLElement $xml)
- */
 class HKQuantityTypeIdentifierHeartRateVariabilitySDNN extends Record
 {
     private $heartRateVariabilityMetadataList;
@@ -19,7 +16,9 @@ class HKQuantityTypeIdentifierHeartRateVariabilitySDNN extends Record
         return substr(__CLASS__, strlen(__NAMESPACE__) + 1);
     }
 
-
+    /**
+     * @return self
+     */
     public static function fromXml(SimpleXMLElement $data): HKModel
     {
         $instance = parent::fromXml($data);
