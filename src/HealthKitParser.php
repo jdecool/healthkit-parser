@@ -22,7 +22,7 @@ class HealthKitParser
     public static function fromFile(string $path): self
     {
         if (!file_exists($path)) {
-            throw new FileNotFound($path);
+            throw FileNotFound::fromPath($path);
         }
 
         return self::fromString(file_get_contents($path));
@@ -33,7 +33,7 @@ class HealthKitParser
         try {
             $xml = new SimpleXMLElement($xml);
         } catch (\Throwable $e) {
-            throw new InvalidXml();
+            throw InvalidXml::parsingError($e);
         }
 
         return self::fromXml($xml);
@@ -84,7 +84,7 @@ class HealthKitParser
     {
         $recordType = $xml['type'][0] ?? '';
         if ('' === $recordType) {
-            throw new InvalidXml('Missing type on record type');
+            throw InvalidXml::misggingRecordType();
         }
 
         $tagParserClass = sprintf('%s\\%s', __NAMESPACE__, $recordType);
@@ -92,6 +92,6 @@ class HealthKitParser
             return call_user_func([$tagParserClass, 'fromXml'], $xml);
         }
 
-        throw new RuntimeException("No parser implemented for '$recordType' record type");
+        throw RuntimeException::noParserImplemented("Record[@$recordType]");
     }
 }

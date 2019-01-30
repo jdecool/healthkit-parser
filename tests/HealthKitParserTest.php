@@ -40,6 +40,7 @@ class HealthKitParserTest extends TestCase
     public function testExceptionThrowIfCreateParserWhithInvalidFilePath()
     {
         $this->expectException(FileNotFound::class);
+        $this->expectExceptionMessage("File '/foo/bar.xml' not found.");
 
         $parser = HealthKitParser::fromFile('/foo/bar.xml');
     }
@@ -54,6 +55,7 @@ class HealthKitParserTest extends TestCase
     public function testExceptionThrowIfCreateParserWithInvalidXmlString()
     {
         $this->expectException(InvalidXml::class);
+        $this->expectExceptionMessage('An error occured on XML parsing');
 
         $parser = HealthKitParser::fromString('invalid xml');
     }
@@ -416,13 +418,13 @@ XML
     {
         $parser = HealthKitParser::fromString(<<<XML
 <HealthData locale="fr_FR">
-  <Record type="UnknowRecordType" sourceName="Apple Watch" sourceVersion="5.1.2" unit="count/min" creationDate="2018-12-22 00:33:44 +0100" startDate="2018-12-21 08:03:56 +0100" endDate="2018-12-21 18:55:21 +0100" value="107.5"/>
+  <Record type="UnknowType" sourceName="Apple Watch" sourceVersion="5.1.2" unit="count/min" creationDate="2018-12-22 00:33:44 +0100" startDate="2018-12-21 08:03:56 +0100" endDate="2018-12-21 18:55:21 +0100" value="107.5"/>
 </HealthData>
 XML
 );
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage("No parser implemented for 'UnknowRecordType' record type");
+        $this->expectExceptionMessage("No parser is implemented for 'Record[@UnknowType]' tag");
 
         $tag = $parser->lines()->current();
     }
