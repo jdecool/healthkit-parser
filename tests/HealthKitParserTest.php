@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JDecool\HKParser\Tests;
 
 use DateTimeImmutable;
+use DateTimeZone;
 use JDecool\HKParser\Exception\FileNotFound;
 use JDecool\HKParser\Exception\InvalidXml;
 use JDecool\HKParser\Exception\RuntimeException;
@@ -427,6 +428,30 @@ XML
         $this->expectExceptionMessage("No parser is implemented for 'Record[@UnknowType]' tag");
 
         $tag = $parser->lines()->current();
+    }
+
+    public function testExportDateIsFilledWhenParserIsInstanciate()
+    {
+        $parser = HealthKitParser::fromString(<<<XML
+<HealthData locale="fr_FR">
+  <ExportDate value="2019-01-20 11:21:07 +0100"/>
+</HealthData>
+XML
+);
+
+        $this->assertInstanceOf(DateTimeImmutable::class, $parser->exportDate());
+        $this->assertEquals(new DateTimeImmutable('2019-01-20 11:21:07', new DateTimeZone('+0100')), $parser->exportDate());
+    }
+
+    public function testExportDateIsNotFilledIfNotPresentInData()
+    {
+        $parser = HealthKitParser::fromString(<<<XML
+<HealthData locale="fr_FR">
+</HealthData>
+XML
+);
+
+        $this->assertNull($parser->exportDate());
     }
 
     public function testLocaleParsing()

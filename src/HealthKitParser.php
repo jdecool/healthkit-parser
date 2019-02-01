@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace JDecool\HKParser;
 
+use DateTimeImmutable;
 use Generator;
 use JDecool\HKParser\Exception\FileNotFound;
 use JDecool\HKParser\Exception\InvalidXml;
@@ -19,6 +20,9 @@ class HealthKitParser
     private $xml;
     private $logger;
     private $locale;
+
+    /** @var DateTimeImmutable|null */
+    private $exportDate;
 
     public static function fromFile(string $path): self
     {
@@ -58,11 +62,20 @@ class HealthKitParser
         $this->xml = $xml;
         $this->logger = $logger;
         $this->locale = (string) $xml['locale'];
+
+        if (1 === $this->xml->ExportDate->count()) {
+            $this->exportDate = new DateTimeImmutable((string) $this->xml->ExportDate['value']);
+        }
     }
 
     public function locale(): string
     {
         return $this->locale;
+    }
+
+    public function exportDate(): ?DateTimeImmutable
+    {
+        return $this->exportDate;
     }
 
     /**
