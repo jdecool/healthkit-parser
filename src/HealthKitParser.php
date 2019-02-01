@@ -18,6 +18,7 @@ class HealthKitParser
 
     private $xml;
     private $logger;
+    private $locale;
 
     public static function fromFile(string $path): self
     {
@@ -50,8 +51,18 @@ class HealthKitParser
             $logger = new NullLogger();
         }
 
+        if ('HealthData' !== $xml->getName()) {
+            throw InvalidXml::invalidHealthData();
+        }
+
         $this->xml = $xml;
         $this->logger = $logger;
+        $this->locale = (string) $xml['locale'];
+    }
+
+    public function locale(): string
+    {
+        return $this->locale;
     }
 
     /**

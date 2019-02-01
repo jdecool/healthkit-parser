@@ -17,4 +17,9 @@ class InvalidXml extends RuntimeException
     {
         return new self('Missing type on record type', 0, $previous);
     }
+
+    public static function invalidHealthData(Throwable $previous = null): self
+    {
+        return new self('Invalid Health data', 0, $previous);
+    }
 }

@@ -428,4 +428,26 @@ XML
 
         $tag = $parser->lines()->current();
     }
+
+    public function testLocaleParsing()
+    {
+        $parser = HealthKitParser::fromString(<<<XML
+<HealthData locale="fr_FR">
+</HealthData>
+XML
+);
+
+        $this->assertSame('fr_FR', $parser->locale());
+    }
+
+    public function testExceptionThrowIfTryingToParseInvalidHealthData()
+    {
+        $this->expectException(InvalidXml::class);
+        $this->expectExceptionMessage('Invalid Health data');
+
+        $parser = HealthKitParser::fromString(<<<XML
+<ExportDate value="2019-01-20 11:21:07 +0100"/>
+XML
+);
+    }
 }
