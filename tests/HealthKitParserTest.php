@@ -475,4 +475,42 @@ XML
 XML
 );
     }
+
+    public function testReadSpecificTag()
+    {
+        $parser = HealthKitParser::fromString(<<<XML
+<HealthData locale="fr_FR">
+    <ExportDate value="2019-01-20 11:21:07 +0100"/>
+    <Me HKCharacteristicTypeIdentifierDateOfBirth="1986-06-09" HKCharacteristicTypeIdentifierBiologicalSex="HKBiologicalSexMale" HKCharacteristicTypeIdentifierBloodType="HKBloodTypeNotSet" HKCharacteristicTypeIdentifierFitzpatrickSkinType="HKFitzpatrickSkinTypeNotSet"/>
+    <Record type="HKQuantityTypeIdentifierWalkingHeartRateAverage" sourceName="Apple Watch" sourceVersion="5.1.2" unit="count/min" creationDate="2018-12-22 00:33:44 +0100" startDate="2018-12-21 08:03:56 +0100" endDate="2018-12-21 18:55:21 +0100" value="107.5"/>
+    <Record type="HKQuantityTypeIdentifierVO2Max" sourceName="Apple Watch" unit="mL/min·kg" creationDate="2018-12-08 17:19:30 +0100" startDate="2018-12-08 17:19:30 +0100" endDate="2018-12-08 17:19:30 +0100" value="42.095">
+        <MetadataEntry key="HKVO2MaxTestType" value="2"/>
+    </Record>
+</HealthData>
+XML
+);
+
+        $this->assertCount(2, $parser->read(HealthKitParser::TAG_RECORD));
+
+        $expectedInstanceLine = [
+            HKQuantityTypeIdentifierWalkingHeartRateAverage::class,
+            HKQuantityTypeIdentifierVO2Max::class,
+        ];
+        foreach ($parser->read(HealthKitParser::TAG_RECORD) as $index => $item) {
+            $this->assertInstanceOf($expectedInstanceLine[$index], $item);
+        }
+    }
+
+    public function testNoItemReturnedIfSpecificTagNotExists()
+    {
+        $parser = HealthKitParser::fromString(<<<XML
+<HealthData locale="fr_FR">
+    <ExportDate value="2019-01-20 11:21:07 +0100"/>
+    <Me HKCharacteristicTypeIdentifierDateOfBirth="1986-06-09" HKCharacteristicTypeIdentifierBiologicalSex="HKBiologicalSexMale" HKCharacteristicTypeIdentifierBloodType="HKBloodTypeNotSet" HKCharacteristicTypeIdentifierFitzpatrickSkinType="HKFitzpatrickSkinTypeNotSet"/>
+</HealthData>
+XML
+);
+
+        $this->assertCount(0, $parser->read(HealthKitParser::TAG_RECORD));
+    }
 }

@@ -15,7 +15,7 @@ use SimpleXMLElement;
 
 class HealthKitParser
 {
-    private const TYPE_RECORD = 'Record';
+    public const TAG_RECORD = 'Record';
 
     private $xml;
     private $logger;
@@ -86,19 +86,39 @@ class HealthKitParser
     public function lines(): Generator
     {
         foreach ($this->xml as $line) {
-            $tag = $line->getName();
-            switch ($tag) {
-                case self::TYPE_RECORD:
-                    yield $this->parseTagRecord($line);
-                    break;
-
-                default:
-                    $this->logger->warning('Unknow tag', [
-                        'tag' => $tag,
-                    ]);
-                    continue 2;
+            if (null !== ($model = $this->parseLine($line))) {
+                yield $model;
             }
         }
+    }
+
+    /**
+     * @return HKModel[]
+     *
+     * @throws InvalidXml
+     */
+    public function read(string $tag): Generator
+    {
+        foreach ($this->xml->$tag as $line) {
+            if (null !== ($model = $this->parseLine($line))) {
+                yield $model;
+            }
+        }
+    }
+
+    private function parseLine(SimpleXMLElement $line): ?HKModel
+    {
+        $tag = $line->getName();
+        switch ($tag) {
+            case self::TAG_RECORD:
+                return $this->parseTagRecord($line);
+        }
+
+        $this->logger->warning('Unknow tag', [
+            'tag' => $tag,
+        ]);
+
+        return null;
     }
 
     /**
