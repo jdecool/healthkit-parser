@@ -106,6 +106,9 @@ class HealthKitParser
         }
     }
 
+    /**
+     * @throws InvalidXml
+     */
     private function parseLine(SimpleXMLElement $line): ?HKModel
     {
         $tag = $line->getName();
